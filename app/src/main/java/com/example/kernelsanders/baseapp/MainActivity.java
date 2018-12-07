@@ -1,16 +1,22 @@
 package com.example.kernelsanders.baseapp;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,9 +24,13 @@ import android.widget.*;
 import android.view.View;
 import android.widget.Button;
 
+import org.w3c.dom.Text;
+
+import java.text.BreakIterator;
+
 public class MainActivity extends AppCompatActivity implements SensorEventListener, StepListener {
     public static final String channel_id = "personal_notifications";
-
+    public static TextView temperature;
     private TextView steps;
     private Button start;
     private Button stop;
@@ -50,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });*/
 
+        //Gets Temperature
+        getTemp();
+
         //Push Notification Button
         Button createNotificationButton = findViewById(R.id.NotificationButton);
         createNotificationButton.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +81,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         findViewById(R.id.hydrationButton).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 alg.updateHydrationLevel(((TextView) findViewById(R.id.PrintHydration)));
+                getTemp();
             }
         });
+
+
+
 
         findViewById(R.id.userSettings).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -93,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 startActivity(intent);
             }
         });
+
 
      /*  findViewById(R.id.NotificationButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-
     }
 
     @Override
@@ -167,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         numSteps++;
         steps.setText(TEXT_NUM_STEPS + numSteps);
     }
+
 
 
     //Creates and displays a notification
@@ -188,6 +206,34 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Add as notification
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(0, builder.build());*/
+    }
+
+    public void getTemp(){
+
+        temperature = findViewById(R.id.printTemperature);
+
+        LocationManager locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        String provider = locMan.getBestProvider(new Criteria(), false);
+
+        //if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && )
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location loc = locMan.getLastKnownLocation(provider);
+
+        GetTemperature task = new GetTemperature();
+
+        task.execute("api.openweathermap.org/data/2.5/weather?lat=" + loc.getLatitude() + "&lon=" + loc.getLongitude() + "type=accurate&units=imperial&APPID=db8a864457e43bcb117f89892e102e88");
+
     }
 
 }
