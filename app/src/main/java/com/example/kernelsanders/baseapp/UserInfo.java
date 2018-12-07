@@ -7,6 +7,7 @@ public class UserInfo //extends AppCompatActivity
 {
     private double height;
     private double weight;
+    private int age;
     //SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
@@ -16,6 +17,7 @@ public class UserInfo //extends AppCompatActivity
         editor = sharedPreferences.edit();
         height = 0;
         weight = 0;
+        age = 0;
 
         if(!sharedPreferences.contains("height"))
         {
@@ -34,6 +36,15 @@ public class UserInfo //extends AppCompatActivity
         }
         else
             weight = Double.parseDouble(sharedPreferences.getString("weight",""));
+
+        if(!sharedPreferences.contains("age"))
+        {
+            weight = 0;
+            editor.putString("age", age+"");
+            editor.commit();
+        }
+        else
+            age = Integer.parseInt(sharedPreferences.getString("age",""));
     }
 
     public void updateHeight(double height)
@@ -50,6 +61,13 @@ public class UserInfo //extends AppCompatActivity
         editor.commit();
     }
 
+    public void updateAge(int age)
+    {
+        this.age = age;
+        editor.putString("age", age+"");
+        editor.commit();
+    }
+
     public double getHeight()
     {
         return height;
@@ -59,4 +77,6 @@ public class UserInfo //extends AppCompatActivity
     {
         return weight;
     }
+
+    public int getAge() { return age; }
 }

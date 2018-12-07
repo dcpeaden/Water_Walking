@@ -20,6 +20,7 @@ public class UserSettings extends AppCompatActivity
         setContentView(R.layout.activity_user_info);
         ((TextView)findViewById(R.id.heightView)).setText(userInfo.getHeight()+" Ft");
         ((TextView)findViewById(R.id.weightView)).setText(userInfo.getWeight()+" Lbs");
+        ((TextView)findViewById(R.id.ageView)).setText(userInfo.getAge()+" y/o");
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener()
         {
@@ -31,27 +32,47 @@ public class UserSettings extends AppCompatActivity
             }
         });
 
-        findViewById(R.id.setHeight).setOnClickListener(new View.OnClickListener()
+        findViewById(R.id.setInfo).setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
                 String text = ((TextView)findViewById(R.id.setHeightText)).getText().toString();
-                double d = Double.parseDouble(text);
-                userInfo.updateHeight(d);
-                ((TextView)findViewById(R.id.heightView)).setText(userInfo.getHeight() +" Ft");
-                ((TextView)findViewById(R.id.setHeightText)).setText("");
-            }
-        });
+                try
+                {
+                    double d = Double.parseDouble(text);
+                    userInfo.updateHeight(d);
+                    ((TextView)findViewById(R.id.heightView)).setText(userInfo.getHeight() +" Ft");
+                    ((TextView)findViewById(R.id.setHeightText)).setText("");
+                }
+                catch(Exception e) {
 
-        findViewById(R.id.setWeight).setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                String text = ((TextView)findViewById(R.id.setWeightText)).getText().toString();
-                double d = Double.parseDouble(text);
-                userInfo.updateWeight(d);
-                ((TextView)findViewById(R.id.weightView)).setText(userInfo.getWeight() +" Lbs");
-                ((TextView)findViewById(R.id.setWeightText)).setText("");
+                }
+
+                text = ((TextView)findViewById(R.id.setWeightText)).getText().toString();
+                try
+                {
+                    double d = Double.parseDouble(text);
+                    userInfo.updateWeight(d);
+                    ((TextView)findViewById(R.id.weightView)).setText(userInfo.getWeight() +" Lbs");
+                    ((TextView)findViewById(R.id.setWeightText)).setText("");
+                }
+                catch(Exception e)
+                {
+
+                }
+
+                text = ((TextView)findViewById(R.id.setAgeText)).getText().toString();
+                try
+                {
+                    int i = Integer.parseInt(text);
+                    userInfo.updateAge(i);
+                    ((TextView)findViewById(R.id.ageView)).setText(userInfo.getAge() +" y/o");
+                    ((TextView)findViewById(R.id.setAgeText)).setText("");
+                }
+                catch(Exception e)
+                {
+
+                }
             }
         });
     }
