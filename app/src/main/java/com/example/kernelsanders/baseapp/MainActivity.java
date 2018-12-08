@@ -63,14 +63,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Gets Temperature
         getTemp();
 
-        //Push Notification Button
-        Button createNotificationButton = findViewById(R.id.NotificationButton);
-        createNotificationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addNotification();
-            }
-        });
 
 
 
@@ -186,27 +178,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
 
-
-    //Creates and displays a notification
-    private void addNotification(){
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channel_id)
-                //.setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle("Hello from Dr40")
-                .setContentText("This is a test")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        NotificationManagerCompat notificationManagerCompat = new NotificationManagerCompat.from(this);
-        notificationManagerCompat.notify(001, builder.build());
-
-        /*//Creates the intent needed to show the notification
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(contentIntent);
-
-        // Add as notification
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());*/
-    }
 
     public void getTemp(){
 
